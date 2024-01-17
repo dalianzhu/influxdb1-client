@@ -59,6 +59,12 @@ type HTTPConfig struct {
 
 	// WriteEncoding specifies the encoding of write request
 	WriteEncoding ContentEncoding
+
+	// MaxConnsPerHost is equal to the client http transport's MaxConnsPerHost config
+	MaxConnsPerHost int
+
+	// MaxIdleConnsPerHost is equal to the client http transport's MaxIdleConnsPerHost config
+	MaxIdleConnsPerHost int
 }
 
 // BatchPointsConfig is the config data needed to create an instance of the BatchPoints struct.
@@ -128,6 +134,9 @@ func NewHTTPClient(conf HTTPConfig) (Client, error) {
 	if conf.TLSConfig != nil {
 		tr.TLSClientConfig = conf.TLSConfig
 	}
+	tr.MaxIdleConnsPerHost = conf.MaxIdleConnsPerHost
+	tr.MaxConnsPerHost = conf.MaxConnsPerHost
+
 	return &client{
 		url:       *u,
 		username:  conf.Username,
